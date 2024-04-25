@@ -1,0 +1,233 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>RNA Folding Visualizer</title>
+        <link rel="icon" href="icon.png" type="image/x-icon">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+        <style>
+            :root{
+                --alpha : #e29578;
+                --beta : #ffddd2;
+                --gamma : #edf6f9;
+                --delta : #83c5be;
+                --eta : #006d77;            
+                --alphas : #e2957890;    
+                --betas : #ffddd290;
+                --etas : #e2957890;
+            }
+            body {
+                font-family: 'Poppins', sans-serif;
+                margin: 0;
+                background: linear-gradient(150deg, var(--gamma), 40%, var(--delta));
+                color: var(--eta);
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 40px;;
+                background: var(--beta);
+                border-radius: 12px;
+                box-shadow: 0 0 20px var(--etas);
+                text-align: center;
+            }
+            
+            text {
+                font-size: 14px;
+                dominant-baseline: middle;
+                text-anchor: middle;
+            }
+            h1, h2 {
+                font-weight: 500;
+                color: var(--eta);
+            }
+
+            h1 {
+                font-size: 50px;
+                margin-bottom: 20px;
+                font-weight: bold;
+            }
+
+
+            #rnaStructure {
+                width: 100%;
+                height: 400px;
+                /* margin-top: 20px; */
+            }
+
+            input{
+                height: 20px; /* Match height */
+                width: calc(100% - 24px); /* Match width */
+                padding: 10px; /* Adjust padding */
+                /* margin-top: 20px; */
+                border-radius: 8px;
+                box-shadow: 0 0 10px var(--etas);
+            }
+
+
+            input {
+                text-align: center; /* Center text */
+                border-radius: 6px;
+                box-shadow: 0 0 5px var(--etas);
+                background-color: var(--gamma); /* Match pre background color */
+                color: var(--eta); /* Match pre text color */
+                font-weight: bold;
+                font-size: 16px;
+                outline: none;
+                transition: border-color 0.3s ease;
+                margin: 0 auto; /* Center horizontally */
+            }
+
+            #rnaStructure {
+                background-color: var(--gamma);
+                border-radius: 4px;
+                box-shadow: 0 0 5px var(--etas);
+                font-weight: bold;
+                color: var(--eta);
+                font-size: 14px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>RNA Folding Visualizer</h1>
+            <form id="rnaForm">
+                <label for="rnaInput"><h2>Enter RNA Sequence:</h2></label>
+                <input type="text" id="rnaInput" value="ACCGGUAGU" autocomplete="off" style="width: calc(100% - 32px); padding: 10px; border: none; border-radius: 6px; font-size: 16px; outline: none; font-family: 'Consolas', monospace;">
+            </form>        
+            <form id="dotForm">
+                <label for="dotBracketOutput"><h2>Dot Bracket Notation:</h2></label>
+                <input type="text" id="dotBracketOutput" value="((.....))" autocomplete="off" style="width: calc(100% - 32px); padding: 10px; border: none; border-radius: 6px; font-size: 16px; outline: none; font-family: 'Consolas', monospace;">
+            </form>     
+            <h2>Graphical Representation:</h2>
+            <svg id="rnaStructure"></svg>
+        </div>
+        <script src="output.js"></script>
+        <script src="app.js" defer></script>
+        <script src="zoomer.js"></script>
+        <script>
+
+            draw(document.getElementById("rnaInput").value, document.getElementById("dotBracketOutput").value);
+            let zoomer = svgPanZoom('#rnaStructure');
+            zoomer.disableDblClickZoom();
+            zoomer.zoomBy(0.85);
+
+            document.getElementById("rnaStructure").addEventListener("dblclick", function() {
+                zoomer.center();
+                zoomer.resetZoom();
+                zoomer.zoomBy(0.85);
+            });
+
+            document.getElementById("rnaInput").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent the default form submission behavior
+                    submitSequence();
+                }
+            });
+
+            document.getElementById("dotBracketOutput").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent the default form submission behavior
+                    draw(document.getElementById("rnaInput").value, document.getElementById("dotBracketOutput").value);
+                }
+            });
+            async function draw(sequence, dotBracket) {
+                await drawStructure(sequence, dotBracket);
+                zoomer.destroy();
+                zoomer = svgPanZoom('#rnaStructure');
+                zoomer.disableDblClickZoom();
+                zoomer.zoomBy(0.85);
+            }
+            function drawStructure(sequence, dotBracket) {
+                const svg = document.getElementById('rnaStructure');
+                svg.innerHTML = ''; // Clear previous drawings
+                const width = svg.clientWidth;
+                const height = svg.clientHeight;
+                const radius = 12;
+                const gap = 50;
+                const offset = width/2 - (sequence.length * gap) / 2;
+                let paired = [];
+
+                // Find pairs based on Dot Bracket Notation
+                const stack = [];
+                for (let i = 0; i < dotBracket.length; i++) {
+                    if (dotBracket[i] === '(') {
+                        stack.push(i);
+                    } else if (dotBracket[i] === ')') {
+                        let start = stack.pop();
+                        paired.push([start, i]);
+                    }
+                }
+
+                // Draw RNA backbone and bases
+                for (let i = 0; i < sequence.length; i++) {
+                    let x = offset + radius + i * gap;
+                    let y = height / 2;
+
+                    // Draw base as a labeled circle
+                    let base = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    base.setAttribute("cx", x);
+                    base.setAttribute("cy", y);
+                    base.setAttribute("r", radius);
+                    base.setAttribute("fill", "#ffddd2");
+                    base.setAttribute("stroke", "#e29578");
+                    base.setAttribute("stroke-width", "2");
+                    svg.appendChild(base);
+
+                    // Label for the base
+                    let label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    label.setAttribute("x", x);
+                    label.setAttribute("y", y);
+                    label.setAttribute("fill", "#006d77");
+                    label.style.fontFamily = "'Consolas', monospace";  // Added line
+                    label.textContent = sequence[i];
+                    svg.appendChild(label);
+
+                    // Draw backbone line
+                    if (i > 0) {
+                        let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        line.setAttribute("x1", offset + radius + (i - 1) * gap + radius);
+                        line.setAttribute("y1", y);
+                        line.setAttribute("x2", x - radius);
+                        line.setAttribute("y2", y);
+                        line.setAttribute("stroke", "#e07a7a");
+                        line.setAttribute("stroke-width", "2");
+                        svg.appendChild(line);
+                    }
+                }
+
+                // Draw paired edges with animation
+                paired.forEach((pair, index) => {
+                    let x1 = offset + radius + pair[0] * gap;
+                    let x2 = offset + radius + pair[1] * gap;
+                    let y = height / 2 - radius;
+                    let e = Math.sqrt(1 - ((x2-x1)/4)**2 / ((x2 - x1)/2)**2); 
+                    let arc_length = (x2 - x1)/2 * Math.PI * Math.sqrt(1 - (e**2) / (1 + (e**2)))
+
+                    let arc = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    let sweep = (x2 > x1) ? 1 : 0;
+                    let d = `M${x1 + radius} ${y} A${(x2 - x1) / 2} ${(x2 - x1) / 4} 0 0 ${sweep} ${x2 - radius} ${y}`;
+                    arc.setAttribute("d", d);
+                    // arc.setAttribute("stroke", "#7b61a3");
+                    arc.setAttribute("stroke", "#006d77");
+                    arc.setAttribute("stroke-width", "4");
+                    arc.setAttribute("fill", "none");
+                    arc.setAttribute("stroke-dasharray", arc_length);
+                    arc.setAttribute("stroke-dashoffset", arc_length);
+                    svg.appendChild(arc);
+
+                    // Animate the arc
+                    setTimeout(() => {
+                        arc.style.transition = "stroke-dashoffset 1s ease-in-out";
+                        arc.setAttribute("stroke-dashoffset", 0);
+                    }, index * 400);
+
+                });
+            }
+        </script>
+    </body>
+    </html>
