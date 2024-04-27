@@ -169,11 +169,43 @@
 
                 <p>The actual function for <code>rna_folding</code> is written in C++ in <code>main.cpp</code> that contains the same code as in <code>test.cpp</code> but inside <code>extern "C"</code> that can be compiled to WebAssembly and imported into the JavaScript code as a WebAssembly module.</p>
             </p>
+
+            <h3>index.html:</h3>
+            <p>
+                Has the basic structuring code for defining the skeletal structure of the landing page and the documentation page. Also has some CSS to define the styling of the HTML elements.
+            </p>
         </section>
 
         <section>
             <h2>Experimental Results</h2>
-            <p>[Insert details of the 5 RNA sequences you tested, commands used to run the algorithm, output structures predicted, comparison with actual structures from rnacentral.org, runtime analysis etc.]</p>
+            
+            <h4>1. Actual 2D-Structure</h4>
+            <img src="./Images/23_nucleotides.png" alt="">
+            <h4>1. Predicted 2D-Structure</h4>
+            <img src="./Images/23_nucleotides_output.png" alt="">
+
+            <h4>2. Actual 2D-Structure</h4>
+            <img src="./Images/27_nucleotides.png" alt="">
+            <h4>2. Predicted 2D-Structure</h4>
+            <img src="./Images/27_nucleotides_output.png" alt="">
+
+            <h4>3. Actual 2D-Structure</h4>
+            <img src="./Images/29_nucleotides.png" alt="">
+            <h4>3. Predicted 2D-Structure</h4>
+            <img src="./Images/29_nucleotides_output.png" alt="">
+
+            <h4>4. Actual 2D-Structure</h4>
+            <img src="./Images/30_nucleotides.png" alt="">
+            <h4>4. Predicted 2D-Structure</h4>
+            <img src="./Images/30_nucleotides_output.png" alt="">
+
+            <h4>5. Actual 2D-Structure</h4>
+            <img src="./Images/31_nucleotides.png" alt="">
+            <h4>5. Predicted 2D-Structure</h4>
+            <img src="./Images/31_nucleotides_output.png" alt="">
+
+            <h3>Observations & Remarks:</h3>
+            <p>We observe that the number of pairings in predicted and actual 2D-structures do not match in most cases, and infact we observe that the number of pairings that our algorithm does is more than the actual number of pairings observed. This is because, our algorithm finds the maximum number of pairings that can be done solely based on the conditions provided to us, whereas in real-life, RNA being a 3D structure, has much more restrictions.</p>
         </section>
 
         <section>
@@ -226,6 +258,9 @@
                   </tr>
                 </table>
               </div>
+
+              <img src="./Images/Length_VS_Time Plot.png" alt="Length vs Time plot">
+
               <h2>Time Complexity Analysis of Nussinov Algorithm</h2>
               <p>The Nussinov algorithm is used for predicting the secondary structure of RNA molecules. It is based on dynamic programming and has a time complexity of \( O(n^3) \), where n is the length of the RNA sequence.</p>
             
@@ -241,15 +276,9 @@
 
         <section>
             <h2>References</h2>
-            <ol>
+            <ul>
                 <li><a href="https://rnacentral.org/">https://rnacentral.org/</a></li>
-                <li>[Any other references used]</li>
-            </ol>
-        </section>
-
-        <section>
-            <h2>Remarks</h2>
-            <p>[Any other observations, shortcomings of the algorithm, potential improvements etc.]</p>
+            </ul>
         </section>
     </main>
 </body>
