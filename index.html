@@ -16,6 +16,7 @@
         --alpha: #e29578;
         --beta: #ffddd2;
         --gamma: #edf6f9;
+        --geda: #b8dedc;
         --delta: #83c5be;
         --eta: #006d77;
         --alphas: #e2957890;
@@ -25,14 +26,14 @@
       body {
         font-family: "Poppins", sans-serif;
         margin: 0;
-        background: linear-gradient(150deg, var(--gamma), 25%, var(--delta));
+        height: 100vh;
+        background: linear-gradient(150deg, var(--geda), var(--delta));
         background-size: 250% 250%;
         animation: gradientAnimation 8s ease infinite;
         color: var(--eta);
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 100vh;
       }
 
       #intro {
@@ -40,12 +41,24 @@
         position: relative;
         overflow: hidden;
         z-index: 2;
-        background: linear-gradient(135deg, var(--alpha), var(--beta),var(--alpha), var(--delta), var(--eta),var(--alpha), var(--beta),var(--alpha), var(--delta), var(--eta));
+        background: linear-gradient(
+          135deg,
+          var(--alpha),
+          var(--beta),
+          var(--alpha),
+          var(--delta),
+          var(--eta),
+          var(--alpha),
+          var(--beta),
+          var(--alpha),
+          var(--delta),
+          var(--eta)
+        );
         background-size: 400% 400%; /* Increase background size for smoother animation */
         -webkit-text-fill-color: transparent;
         -webkit-background-clip: text;
         -webkit-user-select: none;
-        animation: gradientText 6s ease infinite;
+        animation: gradientAnimation 6s ease infinite;
       }
 
       #mainContent {
@@ -127,19 +140,6 @@
           background-position: 0% 0%;
         }
         50% {
-          background-position: 75% 75%;
-        }
-        100% {
-          background-position: 0% 0%;
-        }
-      }
-
-      
-      @keyframes gradientText {
-        0% {
-          background-position: 0% 0%;
-        }
-        50% {
           background-position: 100% 100%;
         }
         100% {
@@ -193,14 +193,20 @@
       #btn {
         font-weight: 500;
         font-size: 15px;
+        margin-top: 20px;
         font-family: "Poppins", sans-serif;
-        color: #006d77; 
-        background-color: #e6f9ff; 
-        margin-top: 20px; 
-        padding: 10px 20px; 
-        border: none; 
-        border-radius: 4px; 
+        color: #006d77;
+        background-color: #e6f9ff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
         cursor: pointer;
+        transition: background-color 0.3s ease; /* Add transition for hover effect */
+      }
+
+      #btn:hover,
+      #btn:focus {
+        background-color: #b3e6f2; /* Change background color on hover and focus */
       }
 
       @keyframes ripple-effect {
@@ -267,7 +273,7 @@
     <script src="app.js" defer></script>
     <script src="zoomer.js"></script>
     <script>
-     let zoomer;
+      let zoomer;
 
       function fadePages(e) {
         var intro = document.getElementById("intro");
@@ -292,43 +298,45 @@
       document.getElementById("intro").addEventListener("click", function (e) {
         fadePages(e);
 
-        
-        
         draw(
-            document.getElementById("rnaInput").value,
-            document.getElementById("dotBracketOutput").value
-          );
+          document.getElementById("rnaInput").value,
+          document.getElementById("dotBracketOutput").value
+        );
 
         zoomer = svgPanZoom("#rnaStructure");
         zoomer.disableDblClickZoom();
         zoomer.zoomBy(0.85);
 
         document
-        .getElementById("rnaStructure")
-        .addEventListener("dblclick", function () {
-        zoomer.center();
-        zoomer.resetZoom();
-        zoomer.zoomBy(0.85);
-        });
+          .getElementById("rnaStructure")
+          .addEventListener("dblclick", function () {
+            zoomer.center();
+            zoomer.resetZoom();
+            zoomer.zoomBy(0.85);
+          });
       });
 
-      document.getElementById("rnaInput").addEventListener("input", function (event) {
-        event.target.value = event.target.value.toUpperCase(); // Convert input to uppercase
-        const inputValue = event.target.value; // Convert input to uppercase
-        const validInput = /^[ACGU]*$/.test(event.target.value); // Check if input contains only A, C, G, or U
+      document
+        .getElementById("rnaInput")
+        .addEventListener("input", function (event) {
+          event.target.value = event.target.value.toUpperCase(); // Convert input to uppercase
+          const inputValue = event.target.value; // Convert input to uppercase
+          const validInput = /^[ACGU]*$/.test(event.target.value); // Check if input contains only A, C, G, or U
 
-        if (!validInput) {
-        event.target.value = inputValue.slice(0, -1); // Remove last character if it's not valid
-        }
+          if (!validInput) {
+            event.target.value = inputValue.slice(0, -1); // Remove last character if it's not valid
+          }
         });
 
-        document.getElementById("dotBracketOutput").addEventListener("input", function (event) {
-        const inputValue = event.target.value; // Convert input to uppercase
-        const validInput = /^[.()]*$/.test(event.target.value); // Check if input contains only A, C, G, or U
+      document
+        .getElementById("dotBracketOutput")
+        .addEventListener("input", function (event) {
+          const inputValue = event.target.value; // Convert input to uppercase
+          const validInput = /^[.()]*$/.test(event.target.value); // Check if input contains only A, C, G, or U
 
-        if (!validInput) {
-        event.target.value = inputValue.slice(0, -1); // Remove last character if it's not valid
-        }
+          if (!validInput) {
+            event.target.value = inputValue.slice(0, -1); // Remove last character if it's not valid
+          }
         });
 
       document
@@ -358,14 +366,14 @@
         zoomer = svgPanZoom("#rnaStructure");
         zoomer.disableDblClickZoom();
         zoomer.zoomBy(0.85);
-        
+
         document
-        .getElementById("rnaStructure")
-        .addEventListener("dblclick", function () {
-          zoomer.center();
-          zoomer.resetZoom();
-          zoomer.zoomBy(0.85);
-        });
+          .getElementById("rnaStructure")
+          .addEventListener("dblclick", function () {
+            zoomer.center();
+            zoomer.resetZoom();
+            zoomer.zoomBy(0.85);
+          });
       }
       function drawStructure(sequence, dotBracket) {
         const svg = document.getElementById("rnaStructure");

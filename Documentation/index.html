@@ -2,17 +2,21 @@
 <html>
 <head>
     <title>RNA Folding Documentation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../Visualization/icon.png" type="image/x-icon">
     <script type="text/javascript"
           src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
     <style>
         /* Import the Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@200&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
+        
         :root {
         --alpha: #e29578;
         --beta: #ffddd2;
         --gamma: #edf6f9;
+        --geda: #b8dedc;
         --delta: #83c5be;
         --eta: #006d77;
         --alphas: #e2957890;
@@ -28,7 +32,9 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh; /* Ensure the body takes up the full viewport height */
-            background-color: var(--delta);
+            background: linear-gradient(150deg, var(--geda), var(--delta));
+            background-size: 250% 250%;
+            animation: gradientAnimation 8s ease infinite;
         }
 
         header {
@@ -44,6 +50,27 @@
         #intro-text {
             font-size: 2rem;
             font-weight: 600;
+            
+            text-align: center;
+            background: linear-gradient(
+            135deg,
+            var(--alpha),
+            var(--beta),
+            var(--alpha),
+            var(--delta),
+            var(--eta),
+            var(--alpha),
+            var(--beta),
+            var(--alpha),
+            var(--delta),
+            var(--eta)
+            );
+            background-size: 400% 400%; /* Increase background size for smoother animation */
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            -webkit-user-select: none;
+            animation: gradientText 6s ease infinite;
+            text-align: center;
         }
 
         main {
@@ -54,7 +81,7 @@
         }
 
         section {
-            background-color: var(--beta);
+            background-color: whitesmoke;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
@@ -67,29 +94,54 @@
 
         h2 {
             text-align: center;
-            background: var(--eta);
-            background-size: 400% 400%;
+            background: linear-gradient(
+            135deg,
+            var(--alpha),
+            var(--beta),
+            var(--alpha),
+            var(--delta),
+            var(--eta),
+            var(--alpha),
+            var(--beta),
+            var(--alpha),
+            var(--delta),
+            var(--eta)
+            );
+            background-size: 400% 400%; /* Increase background size for smoother animation */
             -webkit-text-fill-color: transparent;
             -webkit-background-clip: text;
             -webkit-user-select: none;
-            animation: gradientAnimation 6s ease infinite;
+            animation: gradientText 6s ease infinite;
             text-align: center;
         }
 
+        
+      @keyframes gradientText {
+        0% {
+          background-position: 0% 0%;
+        }
+        50% {
+          background-position: 100% 100%;
+        }
+        100% {
+          background-position: 0% 0%;
+        }
+      }
+
         @keyframes gradientAnimation {
             0% {
-                background-position: 0% 0%;
+                background-position: 25% 25%;
             }
             50% {
-                background-position: 100% 100%;
+                background-position: 50% 50%;
             }
             100% {
-                background-position: 0% 0%;
+                background-position: 25% 25%;
             }
         }
 
         code {
-            background-color: var(--beta);
+            background-color: var(--gamma);
             padding: 2px 5px;
             font-family: monospace;
         }
@@ -100,15 +152,21 @@
             display: block;
             margin: 0 auto;
         }
+        
+        a {
+        color: var(--alpha);
+        text-decoration: none;
+        }
+
+        a:hover {
+        color: var(--delta);
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1 id="intro-text">RNA Folding Documentation</h1>
-    </header>
     <main>
         <section>
-            <h2>Algorithm Discussion</h2>
+            <h1 id="intro-text">RNA Folding Algorithm</h1>
             <p>The RNA folding algorithm presented follows a dynamic programming approach to predict the secondary structure of an RNA molecule. It defines a recurrence relation <code>OPT(i, j)</code> to calculate the maximum number of base pairs in the secondary structure for the substring from index <code>i</code> to <code>j</code> of the given RNA sequence.</p>
         
             <p>The aim of this algorithm is to find the optimal secondary structure for a given RNA molecule, which is a crucial factor in determining its biological function and behavior. RNA molecules are single-stranded and can fold into complex two-dimensional structures through complementary base pairing. The secondary structure plays a vital role in governing the overall structure and function of the RNA molecule.</p>
