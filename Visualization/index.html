@@ -190,6 +190,19 @@
         background-color: #ddd; /* Change background color on hover */
       }
 
+      #btn {
+        font-weight: 500;
+        font-size: 15px;
+        font-family: "Poppins", sans-serif;
+        color: #006d77; 
+        background-color: #e6f9ff; 
+        margin-top: 20px; 
+        padding: 10px 20px; 
+        border: none; 
+        border-radius: 4px; 
+        cursor: pointer;
+      }
+
       @keyframes ripple-effect {
         to {
           transform: scale(1000);
@@ -245,6 +258,9 @@
         </form>
         <h2>Graphical Representation:</h2>
         <svg id="rnaStructure"></svg>
+        <a href="../Documentation/index.html">
+          <button id="btn">Documentation</button>
+        </a>
       </div>
     </div>
     <script src="output.js"></script>

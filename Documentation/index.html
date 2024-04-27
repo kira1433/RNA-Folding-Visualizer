@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RNA Folding Documentation</title>
+    <style>
+        /* Import the Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@200&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+        :root {
+        --alpha: #e29578;
+        --beta: #ffddd2;
+        --gamma: #edf6f9;
+        --delta: #83c5be;
+        --eta: #006d77;
+        --alphas: #e2957890;
+        --betas: #ffddd290;
+        --etas: #e2957890;
+      }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure the body takes up the full viewport height */
+            background-color: var(--delta);
+        }
+
+        header {
+            background-color: var(--beta);
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #intro-text {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            flex-grow: 1; /* Allow the main content to take up remaining space */
+        }
+
+        section {
+            background-color: var(--beta);
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            background: linear-gradient(135deg, #f32170, #ff6b08, #cf23cf, #eedd44, #f32170, #ff6b08, #cf23cf, #eedd44);
+            background-size: 400% 400%;
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            -webkit-user-select: none;
+            animation: gradientAnimation 6s ease infinite;
+            text-align: center;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 0%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+
+        code {
+            background-color: var(--beta);
+            padding: 2px 5px;
+            font-family: monospace;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="intro-text">RNA Folding Documentation</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Algorithm Discussion</h2>
+            <p>The algorithm presented in the PDF follows a dynamic programming approach to predict the secondary structure of an RNA molecule. It defines a recurrence relation <code>OPT(i, j)</code> to calculate the maximum number of base pairs in the secondary structure for the substring from index <code>i</code> to <code>j</code> of the given RNA sequence.</p>
+        
+            <p>The aim of this algorithm is to find the optimal secondary structure for a given RNA molecule, which is a crucial factor in determining its biological function and behavior. RNA molecules are single-stranded and can fold into complex two-dimensional structures through complementary base pairing. The secondary structure plays a vital role in governing the overall structure and function of the RNA molecule.</p>
+        
+            <p>The algorithm works by considering all possible base pairings between the nucleotides in the RNA sequence and evaluating the maximum number of base pairs that can be formed while satisfying certain constraints. These constraints include:</p>
+            <ul>
+                <li>No sharp turns: The ends of each base pair must be separated by at least four intervening bases.</li>
+                <li>Complementary base pairing: Only certain pairs of bases can match, such as Adenine with Uracil, and Cytosine with Guanine.</li>
+                <li>No knots: The secondary structure must be knot-free, ensuring that no base pairs cross each other.</li>
+            </ul>
+        
+            <p>The final answer given by the algorithm is the optimal secondary structure, represented as a set of base pairs that maximizes the number of complementary pairs while adhering to the constraints. This secondary structure prediction is valuable in various fields, including:</p>
+            <ul>
+                <li>Molecular biology: Understanding the structure and function of RNA molecules involved in gene expression, regulation, and other cellular processes.</li>
+                <li>Drug design: Identifying potential binding sites on RNA molecules for developing therapeutic agents targeting specific RNA structures.</li>
+                <li>Evolutionary studies: Analyzing the conservation and evolution of RNA structures across different organisms.</li>
+            </ul>
+        
+            <p>The algorithm's efficiency and accuracy in predicting secondary structures make it a valuable tool in computational biology and bioinformatics research.</p>
+        </section>
+
+        <section>
+            <h2>Experimental Results</h2>
+            <p>[Insert details of the 5 RNA sequences you tested, commands used to run the algorithm, output structures predicted, comparison with actual structures from rnacentral.org, runtime analysis etc.]</p>
+        </section>
+
+        <section>
+            <h2>Issues in Coding</h2>
+            <p>One difficulty we faced during implementation was including the panning and zooming features into the SVG canvas for visualizing the predicted secondary structure.</p>
+            <p>Another difficulty faced was figuring out how to use a C++ file's functions in JavaScript using WebAssembly (WASM). We needed to do this because, the algorithm was asked to be written using only C/C++/Java, but the visualization had to be done using HTML/CSS/JS. So, there was a need for the javascript function to access the C++ code we have written as soon as an RNA code was given. In addition to this, compiling the C++ code using WASM was challenging given the number of parameters and dependencies involved.</p>
+            <p>[Discuss any other issues faced during implementation like handling edge cases, memory limitations, optimization techniques used etc.]</p>
+        </section>
+
+        <section>
+            <h2>Timing Analysis</h2>
+            <p>[Provide details on how the runtime scales with increasing input size based on your experiments]</p>
+        </section>
+
+        <section>
+            <h2>References</h2>
+            <ol>
+                <li><a href="RNA_Slides_PDF.pdf">RNA_Slides_PDF.pdf</a></li>
+                <li><a href="https://rnacentral.org/">https://rnacentral.org/</a></li>
+                <li>[Any other references used]</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Remarks</h2>
+            <p>[Any other observations, shortcomings of the algorithm, potential improvements etc.]</p>
+        </section>
+    </main>
+</body>
+</html>
