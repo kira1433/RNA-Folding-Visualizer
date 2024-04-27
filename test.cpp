@@ -1,6 +1,8 @@
 #include <string>
 #include <queue>
 #include <iostream>
+#include <cstring>
+#include <chrono>
 using namespace std;
 
 //RNA FOLDING ALGORITHM
@@ -55,5 +57,14 @@ string rna_folding(string s){
 int main(){
     string s;
     cin >> s;
-    cout << rna_folding(s) << endl;
+
+    /*Time calculation*/
+    // auto start = chrono::high_resolution_clock::now();
+    string result = rna_folding(s);
+    // auto stop = chrono::high_resolution_clock::now();
+    // auto duration = chrono::duration_cast<chrono::microseconds>(stop - start).count();
+
+    // cout << "Time taken: " << duration << endl;
+
+    cout << result << endl;
 }

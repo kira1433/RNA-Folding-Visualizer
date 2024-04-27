@@ -2,6 +2,9 @@
 <html>
 <head>
     <title>RNA Folding Documentation</title>
+    <script type="text/javascript"
+          src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
     <style>
         /* Import the Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@200&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -59,12 +62,12 @@
         }
 
         h1, h2, h3 {
-            color: #333;
+            color: var(--eta);
         }
 
         h2 {
             text-align: center;
-            background: linear-gradient(135deg, #f32170, #ff6b08, #cf23cf, #eedd44, #f32170, #ff6b08, #cf23cf, #eedd44);
+            background: var(--eta);
             background-size: 400% 400%;
             -webkit-text-fill-color: transparent;
             -webkit-background-clip: text;
@@ -106,7 +109,7 @@
     <main>
         <section>
             <h2>Algorithm Discussion</h2>
-            <p>The algorithm presented in the PDF follows a dynamic programming approach to predict the secondary structure of an RNA molecule. It defines a recurrence relation <code>OPT(i, j)</code> to calculate the maximum number of base pairs in the secondary structure for the substring from index <code>i</code> to <code>j</code> of the given RNA sequence.</p>
+            <p>The RNA folding algorithm presented follows a dynamic programming approach to predict the secondary structure of an RNA molecule. It defines a recurrence relation <code>OPT(i, j)</code> to calculate the maximum number of base pairs in the secondary structure for the substring from index <code>i</code> to <code>j</code> of the given RNA sequence.</p>
         
             <p>The aim of this algorithm is to find the optimal secondary structure for a given RNA molecule, which is a crucial factor in determining its biological function and behavior. RNA molecules are single-stranded and can fold into complex two-dimensional structures through complementary base pairing. The secondary structure plays a vital role in governing the overall structure and function of the RNA molecule.</p>
         
@@ -128,26 +131,117 @@
         </section>
 
         <section>
+            <h2>Code Documentation</h2>
+            <h3>test.cpp:</h3>
+            <p>
+                The code implements the Nussinov algorithm to find the maximum number of base pairs in the optimal secondary structure of a given RNA sequence. It uses dynamic programming to fill a 2D array <code>dp</code> with the maximum number of base pairs possible for each substring <code>s[i:j+1]</code>. The base cases are <code>dp[i][i] = 0</code> (no base pairs in a single nucleotide) and <code>dp[i][i+1] = 0</code> (no base pairs in a pair of adjacent nucleotides).
+                
+                For longer substrings, <code>dp[i][j]</code> is calculated as the maximum of:
+                <ol>
+                    <li><code>dp[i][j-1]</code> (excluding the last nucleotide)</li>
+                    <li><code>1 + dp[i][t-1] + dp[t+1][j-1]</code> if <code>s[t-1]</code> and <code>s[j-1]</code> can form a base pair, plus the maximum number of base pairs in the substrings <code>s[i:t]</code> and <code>s[t+1:j]</code>.</li>
+                </ol>
+                
+                After filling <code>dp</code>, a backtracking step reconstructs the optimal structure using a queue. The <code>mp</code> array stores the indices <code>t</code> where the optimal base pair is formed for each <code>dp[i][j]</code>. The dot-bracket notation is built by adding parentheses for base pairs and dots for unpaired nucleotides.
+                The <code>main</code> function reads an RNA sequence, calls <code>rna_folding</code>, and prints the resulting dot-bracket notation.
+            </p>
+
+            <h3>generate_testcases.cpp:</h3>
+            <p>
+                This code generates test cases to analyze the run-time of test.cpp by using functions from the chrono library in C++. It takes in the size of the RNA sequence to be generated and proceeds to create an RNA sequence appeneded with the nucleotides "AGCU".
+            </p>
+
+            <h3>app.js:</h3>
+            <p>
+                <p>This contains javascript code that interacts with a WebAssembly module containing a function called <code>rna_folding_c</code>.</p>
+
+                <p>Specifically, the code does the following related to the RNA folding algorithm:</p>
+
+                <ol>
+                    <li>It waits for the WebAssembly module to finish initializing.</li>
+                    <li>When the user submits an RNA sequence through an input field (presumably a form or button click), it retrieves the input string.</li>
+                    <li>It allocates memory in the WebAssembly module's linear memory to store the input RNA sequence.</li>
+                    <li>It calls the <code>rna_folding_c</code> function exported by the WebAssembly module, passing the input RNA sequence as an argument.</li>
+                    <li>It receives a pointer to a buffer containing the computed dot-bracket notation of the optimal secondary structure from the <code>rna_folding_c</code> function.</li>
+                    <li>It converts the buffer to a JavaScript string and displays it in an output field.</li>
+                    <li>It frees the memory allocated for the input and output buffers in the WebAssembly module's linear memory.</li>
+                </ol>
+
+                <p>The actual function for <code>rna_folding</code> is written in C++ in <code>main.cpp</code> that contains the same code as in <code>test.cpp</code> but inside <code>extern "C"</code> that can be compiled to WebAssembly and imported into the JavaScript code as a WebAssembly module.</p>
+            </p>
+        </section>
+
+        <section>
             <h2>Experimental Results</h2>
             <p>[Insert details of the 5 RNA sequences you tested, commands used to run the algorithm, output structures predicted, comparison with actual structures from rnacentral.org, runtime analysis etc.]</p>
         </section>
 
         <section>
             <h2>Issues in Coding</h2>
-            <p>One difficulty we faced during implementation was including the panning and zooming features into the SVG canvas for visualizing the predicted secondary structure.</p>
-            <p>Another difficulty faced was figuring out how to use a C++ file's functions in JavaScript using WebAssembly (WASM). We needed to do this because, the algorithm was asked to be written using only C/C++/Java, but the visualization had to be done using HTML/CSS/JS. So, there was a need for the javascript function to access the C++ code we have written as soon as an RNA code was given. In addition to this, compiling the C++ code using WASM was challenging given the number of parameters and dependencies involved.</p>
-            <p>[Discuss any other issues faced during implementation like handling edge cases, memory limitations, optimization techniques used etc.]</p>
+            <ul>
+                <li>One difficulty we faced during implementation was including the panning and zooming features into the SVG canvas for visualizing the predicted secondary structure.</li>
+                <li>Another difficulty faced was figuring out how to use a C++ file's functions in JavaScript using WebAssembly (WASM). We needed to do this because, the algorithm was asked to be written using only C/C++/Java, but the visualization had to be done using HTML/CSS/JS. So, there was a need for the javascript function to access the C++ code we have written as soon as an RNA code was given. In addition to this, compiling the C++ code using WASM was challenging given the number of parameters and dependencies involved.</li>
+            </ul>
         </section>
 
         <section>
             <h2>Timing Analysis</h2>
-            <p>[Provide details on how the runtime scales with increasing input size based on your experiments]</p>
+            <div style="display: flex; justify-content: center;">
+                <table style="border-collapse: collapse; margin: 20px;">
+                  <tr>
+                    <th style="border: 1px solid black; padding: 8px;">Length of RNA</th>
+                    <th style="border: 1px solid black; padding: 8px;">Time Elapsed</th>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; padding: 8px;">10</td>
+                    <td style="border: 1px solid black; padding: 8px;">7904μs</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; padding: 8px;">50</td>
+                    <td style="border: 1px solid black; padding: 8px;">66733μs</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; padding: 8px;">100</td>
+                    <td style="border: 1px solid black; padding: 8px;">67963μs</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; padding: 8px;">200</td>
+                    <td style="border: 1px solid black; padding: 8px;">77943μs</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; padding: 8px;">500</td>
+                    <td style="border: 1px solid black; padding: 8px;">191887μs</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; padding: 8px;">1000</td>
+                    <td style="border: 1px solid black; padding: 8px;">1071458μs</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; padding: 8px;">2000</td>
+                    <td style="border: 1px solid black; padding: 8px;">9455342μs</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; padding: 8px;">3000</td>
+                    <td style="border: 1px solid black; padding: 8px;">35237457μs</td>
+                  </tr>
+                </table>
+              </div>
+              <h2>Time Complexity Analysis of Nussinov Algorithm</h2>
+              <p>The Nussinov algorithm is used for predicting the secondary structure of RNA molecules. It is based on dynamic programming and has a time complexity of \( O(n^3) \), where n is the length of the RNA sequence.</p>
+            
+              <h3>Explanation</h3>
+              <p>The algorithm builds a dynamic programming table to find the optimal secondary structure. The table is of size n x n, where n is the length of the RNA sequence. Each cell in the table represents the maximum number of base pairs that can be formed in a subsequence of the RNA sequence.</p>
+            
+              <h3>Time Complexity</h3>
+              <p>Since there are \( O(n^2) \) subproblems, where each subproblem is a cell, therefore, constructing the dynamic programming table involves filling in each cell by considering all possible base pairs. This requires nested loops over the length of the RNA sequence. Therefore, the time complexity of the algorithm is \( O(n^3) \).</p>
+            
+              <h3>Conclusion</h3>
+              <p>The Nussinov algorithm is an efficient approach for predicting the secondary structure of RNA molecules, with a time complexity of \( O(n^3) \). This makes it suitable for analyzing large RNA sequences efficiently.</p>
         </section>
 
         <section>
             <h2>References</h2>
             <ol>
-                <li><a href="RNA_Slides_PDF.pdf">RNA_Slides_PDF.pdf</a></li>
                 <li><a href="https://rnacentral.org/">https://rnacentral.org/</a></li>
                 <li>[Any other references used]</li>
             </ol>
